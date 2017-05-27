@@ -1,10 +1,14 @@
 require 'sinatra'
 require 'json'
+require 'net/http'
 
 post '/' do
 
-  number_facts_uri = URI("http://numbersapi.com/42")
+  # grab the slot value from the incoming request
+  number = JSON.parse(request.body.read)["request"]["intent"]["slots"]["Number"]["value"]
 
+  # pass that number to the numbers api
+  number_facts_uri = URI("http://numbersapi.com/#{ number }")
   number_fact = Net::HTTP.get(number_facts_uri)
 
   {
